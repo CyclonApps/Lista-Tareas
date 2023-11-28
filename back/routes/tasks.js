@@ -1,7 +1,12 @@
 import { Router } from 'express'
+import { TasksController } from '../controllers/tasksController.js'
 
-export const createTasksRouter = () => {
+export const createTasksRouter = ({ taskModel }) => {
   const tasksRouter = Router()
 
-  tasksRouter.get('/')
+  const tasksController = new TasksController({ taskModel })
+
+  tasksRouter.get('/:userId', tasksController.getByUserId)
+
+  return tasksRouter
 }

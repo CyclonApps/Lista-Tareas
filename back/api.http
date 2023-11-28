@@ -1,0 +1,2 @@
+### Recuperar tasques per usuari
+GET http://localhost:3000/tasks/1
