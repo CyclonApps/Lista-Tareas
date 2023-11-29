@@ -9,10 +9,10 @@ app.use(json())
 app.use(corsMiddleware())
 app.disable('x-powered-by')
 
-app.use('/tasks', createTasksRouter({ TaskModel }))
+app.use('/tasks', createTasksRouter({ taskModel: TaskModel }))
 
-const PORT = process.env.PORT ?? 1234
+const PORT = 3000
 
 app.listen(PORT, () => {
-  console.log(`App listenint on http://localhost:${PORT}`)
+  console.log(`App listening on http://localhost:${PORT}`)
 })

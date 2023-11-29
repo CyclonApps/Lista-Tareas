@@ -1,14 +1,24 @@
 import mysql from 'mysql2/promise'
-import 'dotenv/config.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+// const DEFAULT_CONFIG = {
+//   host: 'localhost',
+//   user: 'root',
+//   port: '3306',
+//   password: 'admin',
+//   database: 'moviesdb'
+// }
 
 const DEFAULT_CONFIG = {
-  host: 'localhost',
-  user: 'root',
-  port: '3306',
-  password: 'admin',
-  database: 'moviesdb'
+  host: process.env.HOST,
+  user: process.env.USER,
+  port: process.env.PORT,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE
 }
 
-const connectionString = process.env.DATABASE_URL ?? DEFAULT_CONFIG
-
-export const dbConnection = await mysql.createConnection(process.env.DB_CONFIG)
+export const getDBConnection = async () => {
+  return await mysql.createConnection(DEFAULT_CONFIG)
+}

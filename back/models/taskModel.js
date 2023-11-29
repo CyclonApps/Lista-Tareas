@@ -1,17 +1,23 @@
 import 'dotenv/config'
-import { dbConnection } from '../database/mysql.js'
+import { getDBConnection } from '../database/mysql.js'
+
+const connection = await getDBConnection()
 
 export class TaskModel {
   static async getUserTasks ({ userId }) {
     if (userId) {
-      const [tasks] = dbConnection.query(
-        'SELECT * FROM tasks WHERE userId = ?;',
-        userId
-      )
+      try {
+        const [tasks] = await connection.query(
+          'SELECT * FROM tasks WHERE userId = ?;',
+          [userId]
+        )
 
-      if (tasks.length === 0) return []
+        if (tasks.length === 0) return []
 
-      return tasks
+        return tasks[0]
+      } catch (error) {
+        return []
+      }
     }
   }
 }
