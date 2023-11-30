@@ -1,4 +1,5 @@
 import 'dotenv/config'
+// TODO: injectar connexió BD
 import { getDBConnection } from '../database/mysql.js'
 
 const connection = await getDBConnection()
@@ -19,5 +20,38 @@ export class TaskModel {
         return []
       }
     }
+  }
+
+  static async create ({ input }) {
+    const {
+      userId,
+      content,
+      status
+    } = input
+
+    const uuid = await connection.query('SELECT UUID() uuid;')
+    const [{ taskUuid }] = uuid
+
+    try {
+      await connection.query(
+        `INSERT INTO tasks (taskId, userId, content, isCompleted)
+          VALUES (UUID_TO_BIN("${taskUuid}"), ?, ?, ?);`,
+        [userId, content, status]
+      )
+    } catch (e) {
+      throw new Error(e)
+    }
+
+    const [tasks] = await connection.query(
+      `SELECT taskId, content, isCompleted FROM tasks
+        WHERE userId=UUID_TO_BIN(?);`,
+      [taskUuid]
+    )
+
+    return tasks[0]
+  }
+
+  static delete ({ taskId }) {
+    console.log('hola')
   }
 }
